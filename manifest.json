@@ -1,0 +1,49 @@
+{
+  "name": "Таймер Годування",
+  "short_name": "Годування",
+  "description": "Повноцінний таймер для відстеження годування немовляти з статистикою, нотатками та експортом даних",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#8B5CF6",
+  "background_color": "#F5F0FA",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Почати годування",
+      "short_name": "Старт",
+      "description": "Швидкий старт таймера",
+      "url": "./index.html",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Статистика",
+      "short_name": "Статистика",
+      "description": "Переглянути статистику годувань",
+      "url": "./index.html#stats",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "categories": ["health", "lifestyle", "utilities"],
+  "lang": "uk",
+  "dir": "ltr"
+}

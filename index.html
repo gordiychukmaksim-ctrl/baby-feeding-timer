@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Таймер для відстеження годування немовляти груддю">
+
+    <!-- PWA Configuration -->
+    <meta name="theme-color" content="#8B5CF6">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Годування">
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
+
+    <title>Таймер Годування</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <button class="icon-btn" id="themeToggle" title="Змінити тему">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <h1>🍼 Таймер Годування</h1>
+                <button class="icon-btn" id="settingsBtn" title="Налаштування">
+                    <span>⚙️</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Timer Display -->
+            <div class="timer-display">
+                <div class="time" id="timerDisplay">00:00</div>
+                <div class="timer-label">хвилини:секунди</div>
+
+                <!-- Countdown Timer Controls -->
+                <div class="countdown-controls">
+                    <label class="countdown-toggle">
+                        <input type="checkbox" id="countdownEnabled">
+                        <span>Таймер зворотного відліку</span>
+                    </label>
+                    <div class="countdown-settings hidden" id="countdownSettings">
+                        <label>Тривалість (хв):</label>
+                        <input type="number" id="countdownDuration" min="1" max="60" value="15">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Selection -->
+            <div class="side-selector">
+                <button class="side-btn active" id="leftBtn" data-side="left">
+                    <span class="side-icon">👈</span>
+                    <span class="side-text">Ліва</span>
+                </button>
+                <button class="side-btn" id="rightBtn" data-side="right">
+                    <span class="side-icon">👉</span>
+                    <span class="side-text">Права</span>
+                </button>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="controls">
+                <button class="btn btn-primary" id="startBtn">
+                    <span class="btn-icon">▶</span>
+                    <span class="btn-text">Почати</span>
+                </button>
+                <button class="btn btn-secondary hidden" id="stopBtn">
+                    <span class="btn-icon">⏸</span>
+                    <span class="btn-text">Зупинити</span>
+                </button>
+
+                <!-- Statistics and Export Buttons -->
+                <div class="secondary-controls">
+                    <button class="btn btn-stats" id="statsBtn">
+                        <span class="btn-icon">📊</span>
+                        <span class="btn-text">Статистика</span>
+                    </button>
+                    <div class="export-buttons">
+                        <button class="btn btn-export" id="exportBtn" title="Експорт в CSV">
+                            <span class="btn-icon">💾</span>
+                            <span class="btn-text">Експорт</span>
+                        </button>
+                        <button class="btn btn-share" id="shareBtn" title="Поділитися">
+                            <span class="btn-icon">📤</span>
+                            <span class="btn-text">Поділитися</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Last Feeding Info -->
+            <div class="last-feeding" id="lastFeeding">
+                <div class="info-label">Останнє годування:</div>
+                <div class="info-text">Ще не було записів</div>
+            </div>
+
+            <!-- History Section -->
+            <div class="history-section">
+                <h2>📋 Історія</h2>
+                <div class="history-list" id="historyList">
+                    <div class="empty-state">Історія годувань з'явиться тут</div>
+                </div>
+                <button class="btn btn-clear" id="clearHistoryBtn">Очистити історію</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Statistics Modal -->
+    <div class="modal hidden" id="statsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 Статистика</h2>
+                <button class="modal-close" id="closeStatsModal">✕</button>
+            </div>
+            <div class="modal-body">
+                <!-- Summary Stats -->
+                <div class="stats-summary">
+                    <div class="stat-card">
+                        <div class="stat-label">Сьогодні</div>
+                        <div class="stat-value" id="statTodayCount">0</div>
+                        <div class="stat-sublabel">годувань</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Загальний час</div>
+                        <div class="stat-value" id="statTodayTotal">0 хв</div>
+                        <div class="stat-sublabel">сьогодні</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Середня тривалість</div>
+                        <div class="stat-value" id="statAvgDuration">0 хв</div>
+                        <div class="stat-sublabel">на годування</div>
+                    </div>
+                </div>
+
+                <!-- Side Distribution -->
+                <div class="stats-section">
+                    <h3>Розподіл по сторонах</h3>
+                    <div class="side-stats">
+                        <div class="side-stat">
+                            <span class="side-stat-icon">👈</span>
+                            <span class="side-stat-label">Ліва:</span>
+                            <span class="side-stat-value" id="statLeftCount">0</span>
+                            <span class="side-stat-percent" id="statLeftPercent">(0%)</span>
+                        </div>
+                        <div class="side-stat">
+                            <span class="side-stat-icon">👉</span>
+                            <span class="side-stat-label">Права:</span>
+                            <span class="side-stat-value" id="statRightCount">0</span>
+                            <span class="side-stat-percent" id="statRightPercent">(0%)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weekly Chart -->
+                <div class="stats-section">
+                    <h3>Годування за тиждень</h3>
+                    <canvas id="weeklyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal hidden" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Налаштування</h2>
+                <button class="modal-close" id="closeSettingsModal">✕</button>
+            </div>
+            <div class="modal-body">
+                <!-- Sound Settings -->
+                <div class="settings-section">
+                    <h3>🔔 Звукові сповіщення</h3>
+                    <label class="setting-item">
+                        <span>Увімкнути звуки</span>
+                        <input type="checkbox" id="soundEnabled" checked>
+                    </label>
+                    <label class="setting-item">
+                        <span>Гучність</span>
+                        <input type="range" id="soundVolume" min="0" max="100" value="50">
+                        <span id="volumeValue">50%</span>
+                    </label>
+                    <label class="setting-item">
+                        <span>Нагадування кожні 5 хв</span>
+                        <input type="checkbox" id="reminderEnabled">
+                    </label>
+                    <button class="btn btn-test-sound" id="testSoundBtn">
+                        <span>🔊 Тест звуку</span>
+                    </button>
+                </div>
+
+                <!-- Theme Settings -->
+                <div class="settings-section">
+                    <h3>🎨 Тема</h3>
+                    <div class="theme-options">
+                        <label class="theme-option">
+                            <input type="radio" name="theme" value="light">
+                            <span>☀️ Світла</span>
+                        </label>
+                        <label class="theme-option">
+                            <input type="radio" name="theme" value="dark">
+                            <span>🌙 Темна</span>
+                        </label>
+                        <label class="theme-option">
+                            <input type="radio" name="theme" value="auto" checked>
+                            <span>🔄 Авто</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes Modal (shown when stopping timer) -->
+    <div class="modal hidden" id="notesModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>📝 Додати нотатку</h2>
+            </div>
+            <div class="modal-body">
+                <textarea id="feedingNotes" placeholder="Як пройшло годування? (необов'язково)" rows="3"></textarea>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="saveNotesBtn">Зберегти</button>
+                    <button class="btn btn-secondary" id="skipNotesBtn">Пропустити</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js for statistics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Helper modules -->
+    <script src="sounds.js"></script>
+    <script src="stats.js"></script>
+
+    <!-- Main application -->
+    <script src="script.js"></script>
+</body>
+
+</html>
