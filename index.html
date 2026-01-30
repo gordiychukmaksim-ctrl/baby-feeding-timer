@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Таймер для відстеження годування немовляти груддю">
+
+    <!-- PWA Configuration -->
+    <meta name="theme-color" content="#8B5CF6">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Годування">
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
+
+    <title>Таймер Годування</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🍼 Таймер Годування</h1>
+        </header>
+
+        <main>
+            <!-- Timer Display -->
+            <div class="timer-display">
+                <div class="time" id="timerDisplay">00:00</div>
+                <div class="timer-label">хвилини:секунди</div>
+            </div>
+
+            <!-- Side Selection -->
+            <div class="side-selector">
+                <button class="side-btn active" id="leftBtn" data-side="left">
+                    <span class="side-icon">👈</span>
+                    <span class="side-text">Ліва</span>
+                </button>
+                <button class="side-btn" id="rightBtn" data-side="right">
+                    <span class="side-icon">👉</span>
+                    <span class="side-text">Права</span>
+                </button>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="controls">
+                <button class="btn btn-primary" id="startBtn">
+                    <span class="btn-icon">▶</span>
+                    <span class="btn-text">Почати</span>
+                </button>
+                <button class="btn btn-secondary hidden" id="stopBtn">
+                    <span class="btn-icon">⏸</span>
+                    <span class="btn-text">Зупинити</span>
+                </button>
+            </div>
+
+            <!-- Last Feeding Info -->
+            <div class="last-feeding" id="lastFeeding">
+                <div class="info-label">Останнє годування:</div>
+                <div class="info-text">Ще не було записів</div>
+            </div>
+
+            <!-- History Section -->
+            <div class="history-section">
+                <h2>📋 Історія</h2>
+                <div class="history-list" id="historyList">
+                    <div class="empty-state">Історія годувань з'явиться тут</div>
+                </div>
+                <button class="btn btn-clear" id="clearHistoryBtn">Очистити історію</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
